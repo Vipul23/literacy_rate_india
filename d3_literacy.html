@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src = "http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        <style>
+        <!--Paste your css code here-->
+
+
+
+        circle {
+            stroke: #1abc9c;
+            stroke-width: 2;
+            fill: white;
+        }
+
+
+        .axis path, .axis line {
+    fill: none;
+    stroke: grey;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: 'Raleway';
+    font-size: 11px;
+        </style>
+    </head>
+    <body>
+    <!--Paste your html code here-->
+        
+        <div id ="bar-demo">
+
+        </div>
+
+
+        <script>
+        <!--Paste your javascript code here-->
+
+        
+
+        var data = [{"manLiteracy":9.8,"year":1901},
+            {"manLiteracy":10.6,"year":1911 },
+            {"manLiteracy":12.2,"year":1921},
+            {"manLiteracy":15.6,"year":1931},
+            {"manLiteracy":24.9,"year":1941},
+            {"manLiteracy":27.16,"year":1951},
+            {"manLiteracy":40.4,"year":1961},
+            {"manLiteracy":45.96,"year":1971},
+            {"manLiteracy":56.38,"year":1981},
+            {"manLiteracy":64.13,"year":1991},
+            {"manLiteracy":75.85,"year":2001},
+            {"manLiteracy":82.14,"year":2011}]
+
+
+
+            // add the canvas to the DOM
+      var barDemo = d3.select("#bar-demo").
+      append("svg:svg").
+      attr("width", 650).
+      attr("height", 400).
+      attr("transform", "translate(100,100)).                                                                                                                                                                                                                                                                     
+      style("border", "1px solid black");;
+
+        // creating adaptable axis
+
+
+        var w = 420,
+        h = 400,
+        padding = 30;
+
+        //Create adaptable scales       
+
+
+        var xScale = d3.scale.linear().domain([d3.min(data, function(datum) { return datum.year; }), d3.max(data, function(datum) { return datum.year; })]).
+                rangeRound([padding, w - padding]);
+        var yScale = d3.scale.linear().domain([0, d3.max(data, function(datum) { return datum.manLiteracy; })]).
+                rangeRound([h - padding, padding]);
+
+     
+
+
+      // adding mouse over tip property
+
+      //Select the svg
+     svg = d3.select("svg");
+     //Define and set up the tooltip
+     var tip = d3.tip()
+         .attr('class', 'd3-tip')
+         .offset([-10, 0])
+         .html(function (d) {
+         return d.manLiteracy;
+     });
+     svg.call(tip);
+
+      barDemo.selectAll("circle").
+      data(data).
+      enter().
+      append("svg:circle").
+      attr("cx", function(datum) { return xScale(datum.year); }).
+      attr("cy", function(datum) { return yScale(datum.manLiteracy); }).
+      attr("r", 5).  
+      attr("fill", "#2d578b")
+      .on('mouseover', tip.show)
+     .on('mouseout', tip.hide);;
+
+
+
+
+     //Set up the axes
+
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
+
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + (h - padding) + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + padding + ",0)")
+        .call(yAxis);
+
+    
+
+            
+        </script>
+    </body>
+</html>
